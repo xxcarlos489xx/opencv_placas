@@ -43,16 +43,6 @@ Para ejecutar el programa principal:
 python realtime.py
 ```
 
-## 🧹 Archivo `.gitignore`
-Asegúrate de incluir un `.gitignore` con lo siguiente para evitar subir archivos innecesarios:
-```
-venv/
-__pycache__/
-*.pyc
-.DS_Store
-*.log
-```
-
 ## 👥 Restaurar el entorno en otro equipo
 Cuando clones el repositorio en otra máquina, sigue estos pasos:
 ```bash
