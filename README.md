@@ -38,7 +38,7 @@ pip freeze > requirements.txt
 ```
 
 ## 🖥️ Ejecución del Proyecto
-Para ejecutar el programa principal:
+Para ejecutar el programa principal
 ```bash
 python realtime.py
 ```
