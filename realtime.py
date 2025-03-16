@@ -3,6 +3,9 @@ import re
 
 from camera_selector import select_camera 
 from resources import folder, saveImages
+from db.repository.vehiculo_registro import VehiculoRegistroRepository
+from db.models.vehiculo_registro import VehiculoRegistro
+from db.repository.vehiculo import VehiculoRepository
 
 # Carpeta para guardar las imágenes
 save_folder     = folder()
@@ -28,7 +31,7 @@ if not cap.isOpened():
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)   # Ancho de la imagen
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)  # Alto de la imagen
 
-plate_pattern = re.compile(r'^[A-Z]\d[A-Z]-\d{3}$')
+placa_pattern = re.compile(r'^[A-Z]\d[A-Z]-\d{3}$')
 
 while True:
     # Capturamos un frame de la cámara
@@ -51,22 +54,46 @@ while True:
         # print(detection[0])
         print(detection[1])
 
-        if plate_pattern.match(text):
+        color_rectangulo = (0, 0, 255) #red color
+
+        if placa_pattern.match(text):
             # timestamp = cv2.getTickCount()  # Usamos un timestamp para el nombre del archivo
             # cv2.imwrite(f"placa_detectada_{timestamp}.jpg", frame)
             path_save = saveImages(text, save_folder)
             # Si no es un duplicado, guardar la nueva imagen
             if path_save:
+                # Guardar el registro en mongodb
+                repo        = VehiculoRegistroRepository()
+                registro    = VehiculoRegistro(placa=text)
+                inserted_id = repo.insertar(registro)   
+
                 # Guardar la imagen del fotograma con la placa detectada
                 cv2.imwrite(path_save, frame)  # Guardamos la imagen
 
 
+            # BUSCAR PLACA EN MONGODB
+            busqueda = VehiculoRepository().obtener_por_placa(text)   
+            reporte = f"VEHICULO NO AUTORIZADO - {text}"
+
+            if busqueda:
+                print(busqueda.placa)
+                print(busqueda.departamento_id)
+                color_rectangulo = (0, 255, 0) #green color
+                reporte = "VEHICULO AUTORIZADO"
+
+
             top_left = tuple(map(int, detection[0][0]))  # Convertir a enteros
             bottom_right = tuple(map(int, detection[0][2]))  # Convertir a enteros
+
+            font_scale = 2  # Aumentar este valor para hacer el texto más grande
+            thickness = 3   # Grosor de la letra
+
             # Dibujamos un rectángulo alrededor del texto detectado
-            cv2.rectangle(frame, top_left, bottom_right, (0, 255, 0), 2)
+            cv2.rectangle(frame, top_left, bottom_right, color_rectangulo, 2)
             # Mostramos el texto detectado
-            cv2.putText(frame, detection[1], top_left, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            # cv2.putText(frame, detection[1], top_left, cv2.FONT_HERSHEY_SIMPLEX, 1, color_rectangulo, 2)
+            # cv2.putText(frame, reporte, (top_left[0], top_left[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color_rectangulo, 2)
+            cv2.putText(frame, reporte, (top_left[0], top_left[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color_rectangulo, thickness)
             
 
     # Mostrar el frame con los resultados en tiempo real

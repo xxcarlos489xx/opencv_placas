@@ -62,6 +62,7 @@ https://pytorch-org.translate.goog/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pt
     pip3 install opencv-python easyocr
     pip install torch==2.6.0 #only cpu
     pip3 install pygrabber
+    pip install pymongo
 
     pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 #with cuda
  ```
