@@ -52,6 +52,13 @@ python -m venv venv
 source venv/Scripts/activate  # En Windows (Git Bash)
 pip install -r requirements.txt
 ```
+
+## Crear .exe
+Esto genera carpeta build y dist
+```bash
+    pyinstaller --onefile realtime.py
+```
+
 ### Dependecies installed
 Verificar el pytorch indicado
 
@@ -63,6 +70,8 @@ https://pytorch-org.translate.goog/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pt
     pip install torch==2.6.0 #only cpu
     pip3 install pygrabber
     pip install pymongo
+    pip install pyinstaller
+
 
     pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 #with cuda
  ```
