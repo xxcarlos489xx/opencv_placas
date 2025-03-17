@@ -61,6 +61,8 @@ Esto genera carpeta build y dist
 
 ### Dependecies installed
 Verificar el pytorch indicado
+easyorc -> numpy==2.2.3
+yolo11 ->  numpy==2.1.1
 
 https://pytorch-org.translate.goog/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc
 
